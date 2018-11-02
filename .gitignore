@@ -34,6 +34,8 @@ yarn-error.log
 testem.log
 /typings
 package-lock.json
+/src/assets/webviewer/core
+/src/assets/webviewer/ui
 
 # System Files
 .DS_Store
