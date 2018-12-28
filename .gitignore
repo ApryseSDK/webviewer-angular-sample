@@ -3,6 +3,7 @@
 # WebViewer
 src/lib
 src/license-key.js
+WebViewer.zip
 
 # compiled output
 /dist
