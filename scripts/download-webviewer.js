@@ -23,10 +23,8 @@ download(`https://www.pdftron.com/downloads/WebViewer.zip`, '.')
       // It's highly recommended to use XOD for cordova apps for highest performance
       fs.moveSync('src/WebViewer/lib', 'src/lib');
       fs.removeSync('src/WebViewer');
-      fs.removeSync('src/lib/core/pdf/full');
       fs.removeSync('src/lib/ui-legacy');
       fs.removeSync('src/lib/package.json');
-      fs.removeSync('src/lib/webviewer.js');
       fs.moveSync('src/lib/ui/build', 'src/lib/temp');
       fs.removeSync('src/lib/ui');
       fs.moveSync('src/lib/temp', 'src/lib/ui/build');
