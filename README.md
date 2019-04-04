@@ -34,6 +34,23 @@ Run `npm run build` to build the project. The build artifacts will be stored in 
 
 See [API documentation](https://www.pdftron.com/documentation/web/guides/ui/apis).
 
+## Enabling full API
+
+PDFNetJS Full is a complete browser side PDF SDK, unlocking viewing, parsing and editing of PDF files. To enable full API, you can modify constructor in webviewer.component.ts:
+
+```
+ ngAfterViewInit(): void {
+    this.myWebViewer = new PDFTron.WebViewer({
+      path: '../lib',
+      initialDoc: '../files/webviewer-demo-annotated.pdf',
+      fullAPI: true,
+      l: atob(licenseKey)
+    }, this.viewer.nativeElement);
+  }
+```
+
+You can refer to this [guide for more information](https://www.pdftron.com/documentation/web/guides/pdfnetjsfull-getting-started)
+
 ## Contributing
 
 See [contributing](./CONTRIBUTING.md).
