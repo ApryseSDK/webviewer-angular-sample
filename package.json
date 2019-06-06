@@ -8,9 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "npx @pdftron/webviewer-downloader --webviewerLocation src/lib --licenseLocation src",
-    "add-license": "npx @pdftron/webviewer-downloader --license --licenseLocation src",
-    "download-webviewer": "npx @pdftron/webviewer-downloader --webviewer --webviewerLocation src/lib"
+    "postinstall": "npm run download-webviewer",
+    "download-webviewer": "npx @pdftron/webviewer-downloader --webviewerLocation src/lib"
   },
   "private": true,
   "dependencies": {
