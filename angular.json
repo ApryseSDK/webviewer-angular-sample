@@ -21,8 +21,7 @@
             "assets": [
               "src/favicon.ico",
               "src/files",
-              "src/lib",
-              "src/license-key.js"
+              "src/lib"
             ],
             "styles": [
               "src/styles.css"
