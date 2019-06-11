@@ -1,7 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 declare const PDFTron: any;
-declare let licenseKey: string;
 
 @Component({
   selector: 'app-webviewer',
@@ -15,8 +14,7 @@ export class WebViewerComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.myWebViewer = new PDFTron.WebViewer({
       path: '../lib',
-      initialDoc: '../files/webviewer-demo-annotated.pdf',
-      l: atob(licenseKey)
+      initialDoc: '../files/webviewer-demo-annotated.pdf'
     }, this.viewer.nativeElement);
   }
 

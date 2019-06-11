@@ -8,9 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "npm run download-webviewer && npm run add-license",
-    "download-webviewer": "node scripts/download-webviewer.js",
-    "add-license": "node scripts/add-license.js"
+    "postinstall": "npm run download-webviewer",
+    "download-webviewer": "npx @pdftron/webviewer-downloader --webviewerLocation src/lib"
   },
   "private": true,
   "dependencies": {
@@ -32,10 +31,14 @@
     "@angular/cli": "~7.0.3",
     "@angular/compiler-cli": "~7.0.0",
     "@angular/language-service": "~7.0.0",
-    "@types/node": "~8.9.4",
+    "@pdftron/webviewer-downloader": "^1.0.7",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "~8.9.4",
+    "btoa": "^1.2.1",
     "codelyzer": "~4.5.0",
+    "download": "^7.1.0",
+    "fs-extra": "^7.0.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
@@ -46,9 +49,6 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.1.1",
-    "btoa": "^1.2.1",
-    "download": "^7.1.0",
-    "fs-extra": "^7.0.1"
+    "typescript": "~3.1.1"
   }
 }
