@@ -1,5 +1,6 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
-import { WebViewerComponent } from './webviewer.component';
+import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+
+declare const WebViewer: any;
 
 @Component({
   selector: 'app-root',
@@ -7,41 +8,46 @@ import { WebViewerComponent } from './webviewer.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild(WebViewerComponent) private webviewer: WebViewerComponent;
+  @ViewChild('viewer') viewer: ElementRef;
+  wvInstance: any;
+
+  ngAfterViewInit(): void {
+
+    WebViewer({
+      path: '../lib',
+      initialDoc: '../files/webviewer-demo-annotated.pdf'
+    }, this.viewer.nativeElement).then(instance => {
+      this.wvInstance = instance;
+
+      // now you can access APIs through this.webviewer.getInstance()
+      instance.openElement('notesPanel');
+      // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
+
+      // or listen to events from the viewer element
+      this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
+        const [ pageNumber ] = e.detail;
+        console.log(`Current page is ${pageNumber}`);
+      });
+
+      // or from the docViewer instance
+      instance.docViewer.on('annotationsLoaded', () => {
+        console.log('annotations loaded');
+      });
+
+      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+    })
+  }
 
   ngOnInit() {
-    this.wvReadyHandler = this.wvReadyHandler.bind(this);
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
-  }
-
-  ngAfterViewInit() {
-    this.webviewer.getElement().addEventListener('ready', this.wvReadyHandler);
-    this.webviewer.getElement().addEventListener('documentLoaded', this.wvDocumentLoadedHandler);
-  }
-
-  wvReadyHandler(): void {
-    // now you can access APIs through this.webviewer.getInstance()
-    this.webviewer.getInstance().openElement('notesPanel');
-    // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
-
-    // or listen to events from the viewer element
-    this.webviewer.getElement().addEventListener('pageChanged', (e) => {
-      const [ pageNumber ] = e.detail;
-      console.log(`Current page is ${pageNumber}`);
-    });
-
-    // or from the docViewer instance
-    this.webviewer.getInstance().docViewer.on('annotationsLoaded', () => {
-      console.log('annotations loaded');
-    });
   }
 
   wvDocumentLoadedHandler(): void {
     // you can access docViewer object for low-level APIs
-    const { docViewer } = this.webviewer.getInstance();
-    const annotManager = docViewer.getAnnotationManager();
+    const docViewer = this.wvInstance;
+    const annotManager = this.wvInstance.annotManager;
     // and access classes defined in the WebViewer iframe
-    const { Annotations } = this.webviewer.getWindow();
+    const { Annotations } = this.wvInstance;
     const rectangle = new Annotations.RectangleAnnotation();
     rectangle.PageNumber = 1;
     rectangle.X = 100;
@@ -52,6 +58,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     rectangle.Author = annotManager.getCurrentUser();
     annotManager.addAnnotation(rectangle);
     annotManager.drawAnnotations(rectangle.PageNumber);
-    // see https://www.pdftron.com/api/web/PDFTron.WebViewer.html for the full list of low-level APIs
+    // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
   }
 }
