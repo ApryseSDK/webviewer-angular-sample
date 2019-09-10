@@ -8,7 +8,7 @@ declare const WebViewer: any;
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('viewer', { static: true }) viewer: ElementRef;
+  @ViewChild('viewer', { static: false }) viewer: ElementRef;
   wvInstance: any;
 
   ngAfterViewInit(): void {
