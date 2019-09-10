@@ -40,7 +40,7 @@ PDFNetJS Full is a complete browser side PDF SDK, unlocking viewing, parsing and
 
 ```
  ngAfterViewInit(): void {
-    this.myWebViewer = new PDFTron.WebViewer({
+    WebViewer({
       path: '../lib',
       initialDoc: '../files/webviewer-demo-annotated.pdf',
       fullAPI: true
