@@ -28,7 +28,13 @@ Navigate to `http://localhost:4200/`. The app will automatically reload if you c
 
 ## Build
 
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run build` to build the development build of the project.
+Run `npm run build-prod` to build the production build of the project.
+The build artifacts will be stored in the `dist/` directory.
+
+To run the build, navigate to the `dist/` directory, and run `http-server`. Navigate to the url: host:port/index.html to see the app
+(https://github.com/http-party/http-server/issues/525).
+
 
 ## WebViewer APIs
 
