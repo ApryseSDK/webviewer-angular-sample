@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { AnnotationFactory } from './shared/AnnotationFactory';
 
 declare const WebViewer: any;
 
@@ -34,8 +35,8 @@ export class AppComponent implements OnInit, AfterViewInit {
         console.log('annotations loaded');
       });
 
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
-    })
+      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler);
+    });
   }
 
   ngOnInit() {
@@ -59,5 +60,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     annotManager.addAnnotation(rectangle);
     annotManager.drawAnnotations(rectangle.PageNumber);
     // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
+
+    const triangleAnnot = AnnotationFactory.createTriangle(Annotations);
+    triangleAnnot.X = 50;
+    triangleAnnot.Y = 50;
+    triangleAnnot.Width = 100;
+    triangleAnnot.Height = 100;
+    annotManager.addAnnotation(triangleAnnot);
+    annotManager.redrawAnnotation(triangleAnnot);
   }
 }
+
