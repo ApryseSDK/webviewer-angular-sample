@@ -1,14 +1,12 @@
 import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
 
-declare const WebViewer: any;
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('viewer', { static: false }) viewer: ElementRef;
+  @ViewChild('viewer') viewer: ElementRef;
   wvInstance: any;
 
   ngAfterViewInit(): void {
