@@ -1,6 +1,5 @@
 import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
-
-declare const WebViewer: any;
+import WebViewer from '@pdftron/webviewer';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +19,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.wvInstance = instance;
 
       // now you can access APIs through this.webviewer.getInstance()
-      instance.openElement('notesPanel');
+      instance.openElements(['notesPanel']);
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       // or listen to events from the viewer element
