@@ -8,7 +8,6 @@ WebViewer.zip
 /dist
 /tmp
 /out-tsc
-public/webviewer
 
 # dependencies
 /node_modules
