@@ -25,9 +25,6 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "scripts": [
-              "src/lib/webviewer.min.js"
             ]
           },
           "configurations": {
