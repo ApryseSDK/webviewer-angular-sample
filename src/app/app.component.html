@@ -1,4 +1,7 @@
 <div class="page">
-  <div class="header">Angular sample</div>
+  <div class="header" [ngClass]="{'green': colorChange}">
+    Angular sample
+    <a (click)="toggleColorChange()">Toggle</a>
+  </div>
   <div #viewer class="viewer"></div>
 </div>
