@@ -1,5 +1,7 @@
 import { Component, ViewChild, OnInit, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import WebViewer from '@pdftron/webviewer';
+import { saveAs } from 'file-saver';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +20,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     WebViewer({
       path: '../lib',
-      initialDoc: '../files/webviewer-demo-annotated.pdf'
+      initialDoc: '../files/PdfFields_All_v2.1.pdf'
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
@@ -30,6 +32,13 @@ export class AppComponent implements OnInit, AfterViewInit {
           onClick: () => {
             this.toggleColorChange();
             this.changeDetectorRef.detectChanges();
+          }
+        }).push({
+          type: 'actionButton',
+          // tslint:disable-next-line: max-line-length
+          img: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>',
+          onClick: () => {
+            this.export();
           }
         });
       });
@@ -45,9 +54,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       });
 
       // or from the docViewer instance
-      instance.docViewer.on('annotationsLoaded', () => {
-        console.log('annotations loaded');
-      });
+
 
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler);
     });
@@ -58,6 +65,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   wvDocumentLoadedHandler(): void {
+    console.log('documentLoaded');
+
     // you can access docViewer object for low-level APIs
     const docViewer = this.wvInstance;
     const annotManager = this.wvInstance.annotManager;
@@ -71,12 +80,41 @@ export class AppComponent implements OnInit, AfterViewInit {
     rectangle.Height = 250;
     rectangle.StrokeThickness = 5;
     rectangle.Author = annotManager.getCurrentUser();
-    annotManager.addAnnotation(rectangle);
-    annotManager.drawAnnotations(rectangle.PageNumber);
+    // annotManager.addAnnotation(rectangle);
+    // annotManager.drawAnnotations(rectangle.PageNumber);
     // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
+
+    const pageTracker = {};
+
+    this.wvInstance.docViewer.on('annotationsLoaded', () => {
+      console.log('annotations loaded');
+    });
+
+    annotManager.on('annotationsDrawn', pageNumber => {
+      if (!pageTracker[pageNumber]) {
+        // Attach events
+        console.log('annotationsDrawn', pageNumber);
+        pageTracker[pageNumber] = true;
+        setTimeout(() => {
+          const _annotList = annotManager.getAnnotationsList();
+          _annotList.forEach(annot => {
+            console.log(annot, !!annot.element);
+          });
+        }, 100);
+      }
+    });
   }
 
   toggleColorChange() {
     this.colorChange = !this.colorChange;
+  }
+
+  export() {
+    const { annotManager } = this.wvInstance;
+    annotManager.exportAnnotations({ links: false, widgets: false }).then(xfdfString => {
+      const dataURI = `data:text/xml;base64,${window.btoa(xfdfString)}`;
+      const fileName = `ExportedXFDF_${uuid.v4()}.xml`;
+      saveAs(dataURI, fileName);
+    });
   }
 }
