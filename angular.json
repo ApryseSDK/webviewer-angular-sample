@@ -21,7 +21,9 @@
             "assets": [
               "src/favicon.ico",
               "src/files",
-              "src/lib"
+              "src/lib",
+              "src/app/config.js",
+              "src/app/webviewer.css"
             ],
             "styles": [
               "src/styles.css"
