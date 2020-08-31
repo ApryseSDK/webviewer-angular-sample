@@ -1,3 +1,0 @@
-/** Notice * This file contains works from many authors under various (but compatible) licenses. Please see legal.txt for more information. **/
-(function(){(window.wpCoreControlsBundle=window.wpCoreControlsBundle||[]).push([[4],{333:function(ha,da,f){f.r(da);var ba=f(3),ea=f(109);ha=f(327);f=f(280);ha=function(f){function aa(z,y,x,w){return f.call(this,z,y,x,w)||this}Object(ba.c)(aa,f);aa.prototype.DI=function(){return{start:this.TH-ea.a,stop:this.TH}};aa.prototype.Uo=function(z){var y=this;this.$k(this.url,{start:0,stop:1},function(x,w,r){if(x)return z(x);x=r.request.getResponseHeader("Content-Range");y.TH=x.split("/")[1];f.prototype.Uo.call(y,z)})};
-return aa}(ha["default"]);Object(f.a)(ha);Object(f.b)(ha);da["default"]=ha}}]);}).call(this || window)
