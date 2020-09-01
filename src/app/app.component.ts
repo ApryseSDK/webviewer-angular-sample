@@ -75,21 +75,22 @@ export class AppComponent implements OnInit, AfterViewInit {
       const annotList = annotManager.getAnnotationsList();
       annotList.forEach(annot => {
         if (annot instanceof Annotations.WidgetAnnotation) {
-          // C for Calculate, F for Format, V for Validation, K for Keystroke
 
+          // C for Calculate, F for Format, V for Validation, K for Keystroke
           switch (annot.fieldName) {
             case 'Text1':
+              // Actions that handle Zipcode format and keystroke
               (<any>annot).addAction('F', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_Format(0);' }));
               (<any>annot).addAction('K', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_Keystroke(0);' }));
               break;
             case 'Text2':
+              // Actions that handles a mask on the field
               (<any>annot).addAction('K', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_KeystrokeEx("99-999");' }));
               break;
             default:
               console.log(annot.fieldActions);
               break;
           }
-
         }
       });
     });
