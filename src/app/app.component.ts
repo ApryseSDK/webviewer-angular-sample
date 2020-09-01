@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     WebViewer({
       path: '../lib',
-      initialDoc: '../files/test_one_field.pdf',
+      initialDoc: '../files/test_four_fields.pdf',
       css: 'app/webviewer.css',
       config: 'app/config.js',
     }, this.viewer.nativeElement).then(instance => {
@@ -70,20 +70,26 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     };
 
-    // annotManager.addAnnotation(rectangle);
-    // annotManager.drawAnnotations(rectangle.PageNumber);
-    // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
-
-
     this.wvInstance.docViewer.on('annotationsLoaded', () => {
       console.log('annotations loaded');
       const annotList = annotManager.getAnnotationsList();
       annotList.forEach(annot => {
         if (annot instanceof Annotations.WidgetAnnotation) {
-          const action = new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_KeystrokeEx' });
-          // C for Calculate, F for Format, V for Validation
-          console.log(annot.getField().name, annot, action);
-          (<any>annot).addAction('V', action);
+          // C for Calculate, F for Format, V for Validation, K for Keystroke
+
+          switch (annot.fieldName) {
+            case 'Text1':
+              (<any>annot).addAction('F', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_Format(0);' }));
+              (<any>annot).addAction('K', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_Keystroke(0);' }));
+              break;
+            case 'Text2':
+              (<any>annot).addAction('K', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_KeystrokeEx("99-999");' }));
+              break;
+            default:
+              console.log(annot.fieldActions);
+              break;
+          }
+
         }
       });
     });
