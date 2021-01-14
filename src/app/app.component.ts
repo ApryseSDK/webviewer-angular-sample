@@ -1,9 +1,28 @@
 import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
 import WebViewer from '@pdftron/webviewer';
+import { WebViewerInstance, Annotations as AnnotationsType } from '@pdftron/webviewer';
+import { Flyout } from './flyout';
 
 enum Colors {
   GREY = '#ededed',
   RED = '#c72a2a'
+}
+
+enum AnnotationFieldType {
+  TX = 'Tx', // select, combobox, listbox
+  BTN = 'Btn', // checkbox and radio buttons
+  CH = 'Ch', // select, combobox, listbox
+  SIG = 'Sig' // pdftron signature type
+}
+
+export interface Step {
+  name: string;
+  index: number;
+  type: AnnotationFieldType;
+  pageNumber: number
+  x: number;
+  y: number;
+  field: AnnotationsType.Forms.Field
 }
 
 @Component({
@@ -15,29 +34,25 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer', { static: false }) viewer: ElementRef;
   wvInstance: any;
 
+  steps: Array<Step> = [];
+  annotationsLoaded = false;
+  annotationTracker = {};
+  stepTracker: { [name: string]: Step } = {};
+  flyout: Flyout;
+
+  initialPagesDrawn: Array<number> = [];
+
   constructor() { }
 
   ngAfterViewInit(): void {
 
     WebViewer({
       path: '../lib',
-      initialDoc: '../files/test_four_fields.pdf',
+      initialDoc: '../files/test_7_pages_01.pdf',
       css: 'app/webviewer.css',
-      config: 'app/config.js',
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
-      // now you can access APIs through this.webviewer.getInstance()
-      instance.openElements(['notesPanel']);
-      // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
-
-      // or listen to events from the viewer element
-      this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
-        const [pageNumber] = e.detail;
-        console.log(`Current page is ${pageNumber}`);
-      });
-
-      // or from the docViewer instance
       instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler);
     });
   }
@@ -48,12 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   wvDocumentLoadedHandler(): void {
     console.log('documentLoaded');
-
-    // you can access docViewer object for low-level APIs
-    const docViewer = this.wvInstance;
-    const annotManager = this.wvInstance.annotManager;
-    // and access classes defined in the WebViewer iframe
-    const { Annotations } = this.wvInstance;
+    const { Annotations, docViewer, annotManager } = this.wvInstance;
 
     Annotations.WidgetAnnotation.getContainerCustomStyles = widget => {
       if (widget instanceof Annotations.TextWidgetAnnotation) {
@@ -70,33 +80,101 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     };
 
-    this.wvInstance.docViewer.on('annotationsLoaded', () => {
-      console.log('annotations loaded');
-      const annotList = annotManager.getAnnotationsList();
-      annotList.forEach(annot => {
-        if (annot instanceof Annotations.WidgetAnnotation) {
+    docViewer.on('annotationsLoaded', this.onAnnotationsLoaded.bind(this));
+    annotManager.on('annotationsDrawn', this.onAnnotationsDrawn.bind(this));
+  }
 
-          // C for Calculate, F for Format, V for Validation, K for Keystroke
-          switch (annot.fieldName) {
-            case 'Text1':
-              // Actions that handle Zipcode format and keystroke
-              (<any>annot).addAction('F', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_Format(0);' }));
-              (<any>annot).addAction('K', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_Keystroke(0);' }));
-              break;
-            case 'Text2':
-              // Actions that handles a mask on the field
-              (<any>annot).addAction('K', new this.wvInstance.Actions.JavaScript({ javascript: 'AFSpecial_KeystrokeEx("99-999");' }));
-              break;
-            default:
-              console.log(annot.fieldActions);
-              break;
+  /**
+   * Handler that is called when all annotations have been loaded. All the fields are
+   * looped over to in order to create the guide steps. Grouped fields, like grouped
+   * radio buttons, are counted as one step.
+   */
+  private onAnnotationsLoaded() {
+    const { annotManager } = this.wvInstance;
+    const fieldManager = annotManager.getFieldManager();
+    let index = 0;
+
+    const getField = (field: AnnotationsType.Forms.Field) => {
+      if (!field.type) {
+        // Recursive to get the fields that are nested in the document tree
+        field.children.forEach(getField);
+      } else {
+        const step = {
+          name: field.name,
+          index: index,
+          type: <AnnotationFieldType>field.type,
+          pageNumber: field.widgets[0].PageNumber,
+          x: field.widgets[0].getX(),
+          y: field.widgets[0].getY(),
+          field: field
+        }
+        this.steps.push(step);
+        this.stepTracker[step.name] = step;
+        index += 1;
+      }
+    }
+
+    fieldManager.forEachField(getField);
+
+    this.annotationsLoaded = true;
+
+    // Handle annotationsDrawn handler for pages that have already been drawn
+    this.initialPagesDrawn.forEach(this.onAnnotationsDrawn.bind(this));
+  }
+
+  /**
+   * Handler that is triggered when the annotations have been drawn on a given page.
+   * This is needed because we have to wait until the annotations are drawn on
+   * the page before we can attach events to them as the steps would not exist.
+   * After the annotations are loaded, the function will be run on the pages that
+   * have already been drawn.
+   * @param {number} pageNumber
+   */
+  private onAnnotationsDrawn(pageNumber: number) {
+    const { annotManager, Annotations } = this.wvInstance;
+    const annotList = annotManager.getAnnotationsList();
+
+    if (!this.annotationsLoaded && this.initialPagesDrawn.indexOf(pageNumber) === -1) {
+      // We do not want to handle the annotations until all annotations have been loaded
+      // because the 'annotationsDrawn' event will fire before the annotationsLoaded event.
+      this.initialPagesDrawn.push(pageNumber);
+    } else if (this.annotationsLoaded) {
+      if (annotList) {
+        // console.log('annotationsDrawn', pageNumber);
+        annotList.forEach((annot) => {
+          if (annot instanceof Annotations.WidgetAnnotation) {
+            if (!this.annotationTracker[annot.Id]) {
+              this.attachEvents(annot);
+            }
           }
+        });
+      }
+    }
+  }
+
+  private attachEvents(annotation: AnnotationsType.WidgetAnnotation) {
+    // Events are attached to each applicable annotation (Focus)
+    const field = annotation.getField();
+    const element = (<HTMLElement>annotation.element);
+    const step = this.stepTracker[field.name];
+
+    if (element && step) {
+      // Update the tracker when we have a element to attach events to
+      this.annotationTracker[annotation.Id] = true;
+
+      element.firstChild.addEventListener('focus', (ev: FocusEvent) => {
+        // The current step is whatever field is focused
+        // On focus, update the bar and flyout
+        // console.log('focus', step.pageNumber, step.name);
+
+        const nextStepIndex = step.index + 1 === this.steps.length ? 0 : step.index + 1;
+
+        if (!this.flyout) {
+          this.flyout = new Flyout(this.wvInstance, step, this.steps[nextStepIndex]);
+        } else {
+          this.flyout.move(step, this.steps[nextStepIndex]);
         }
       });
-    });
-
-    annotManager.on('annotationsDrawn', pageNumber => {
-
-    });
+    }
   }
 }

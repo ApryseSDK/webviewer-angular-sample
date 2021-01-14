@@ -1,0 +1,38 @@
+.guide-flyout {
+  width: 85px;
+  height: 35px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  position: absolute;
+  z-index: 100;
+  color: #ffffff;
+  background-color: #848482;
+}
+
+.guide-flyout::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 17.5px 0 17.5px 15px;
+  position: absolute;
+  right: -15px;
+}
+
+.guide-flyout::after {
+  border-color: transparent transparent transparent #848482;
+}
+
+.guide-flyout .flyout-label {
+  line-height: 35px;
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.guide-flyout .flyout-label .flyout-action {
+  color: #ffffff;
+  text-decoration: none;
+  display: block;
+}

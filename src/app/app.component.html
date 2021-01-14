@@ -1,7 +1,10 @@
 <div class="page">
-  <div class="header" [ngClass]="{'green': colorChange}">
-    Angular sample
-    <a (click)="toggleColorChange()">Toggle</a>
-  </div>
   <div #viewer class="viewer"></div>
 </div>
+<template id="guide-flyout-template">
+  <div id="guide-flyout" class="guide-flyout cta-optional">
+    <div class="flyout-label">
+      <a class="flyout-action" href="#">NEXT</a>
+    </div>
+  </div>
+</template>

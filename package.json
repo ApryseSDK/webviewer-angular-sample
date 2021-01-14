@@ -21,7 +21,7 @@
     "@angular/platform-browser": "^8.2.5",
     "@angular/platform-browser-dynamic": "^8.2.5",
     "@angular/router": "^8.2.5",
-    "@pdftron/webviewer": "^7.0.0",
+    "@pdftron/webviewer": "^6.3.6",
     "@types/file-saver": "^2.0.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^2.5.4",
