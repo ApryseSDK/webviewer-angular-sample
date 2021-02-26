@@ -43,10 +43,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   wvDocumentLoadedHandler(): void {
     // you can access docViewer object for low-level APIs
-    const docViewer = this.wvInstance;
-    const annotManager = this.wvInstance.annotManager;
     // and access classes defined in the WebViewer iframe
-    const { Annotations } = this.wvInstance;
+    const { Annotations, annotManager, docViewer } = this.wvInstance;
     const rectangle = new Annotations.RectangleAnnotation();
     rectangle.PageNumber = 1;
     rectangle.X = 100;
