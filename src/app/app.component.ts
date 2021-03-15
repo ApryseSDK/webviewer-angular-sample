@@ -7,7 +7,7 @@ import WebViewer from '@pdftron/webviewer';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('viewer', { static: false }) viewer: ElementRef;
+  @ViewChild('viewer') viewer: ElementRef;
   wvInstance: any;
 
   ngAfterViewInit(): void {
