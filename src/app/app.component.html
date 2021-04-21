@@ -1,4 +1,7 @@
-<div class="page">
-  <div class="header">Angular sample</div>
-  <div #viewer class="viewer"></div>
-</div>
+<button (click)="dialogVisibililtyChanged(true)">a</button>
+<some-dialog
+  [visible]="dialogVisible"
+  [fileUrl]="fileUrlToLoad"
+  (dialogShown)="dialogVisibililtyChanged(true)"
+  (dialogHidden)="dialogVisibililtyChanged(false)">
+</some-dialog>

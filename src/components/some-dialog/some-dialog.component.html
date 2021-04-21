@@ -1,0 +1,11 @@
+<p-dialog header="Title"
+  [(visible)]="visible"
+  [dismissableMask]="true"
+  [style]="{width: '100%', height: '100%'}"
+  (onShow)="onShow()"
+  (onHide)="onDialogHidden()">
+  <div #viewer class="viewer"></div>
+</p-dialog>
+
+
+
