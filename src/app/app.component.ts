@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private fileUrlToLoad: string;
 
   constructor(private someService: SomeService) {
-    // this.fileUrlToLoad = 'https://pdftron.s3.amazonaws.com/files/demo.pdf';
+    this.fileUrlToLoad = 'https://pdftron.s3.amazonaws.com/files/RotationIssue.pdf';
   }
 
   ngOnInit() {
@@ -37,6 +37,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   dialogVisibililtyChanged(visible: boolean) {
     this.dialogVisible = visible;
     if (!visible) {
+      this.fileUrlToLoad = 'https://pdftron.s3.amazonaws.com/files/demo.pdf';
     }
   }
 }

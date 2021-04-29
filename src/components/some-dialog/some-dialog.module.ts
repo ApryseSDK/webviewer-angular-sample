@@ -4,6 +4,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { SomeDialogComponent } from './some-dialog.component';
 import {DialogModule} from 'primeng/dialog';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @NgModule({
   declarations: [
@@ -13,7 +15,9 @@ import {DialogModule} from 'primeng/dialog';
     BrowserAnimationsModule,
     BrowserModule,
     CommonModule,
-    DialogModule
+    DialogModule,
+    NgbModule,
+    NzModalModule 
   ],
   exports: [
     SomeDialogComponent
