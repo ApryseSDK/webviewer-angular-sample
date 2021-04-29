@@ -16,12 +16,15 @@ describe("AppComponent", () => {
     expect(app).toBeTruthy();
   });
 
-  it('should get CoreControls', () => {
+  it('should get CoreControls', (done: DoneFn) => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
+    const app = fixture.debugElement.componentInstance as AppComponent;
     fixture.detectChanges();
     spyOn(app.coreControlsEvent, 'emit');
-    console.log(app.coreControlsEvent.emit);
-    expect(app.coreControlsEvent.emit).toHaveBeenCalledWith('SINGLE');
+    // wait for WV to finish loading document first before checking
+    app.getDocumentLoadedObservable().subscribe(() => {
+      expect(app.coreControlsEvent.emit).toHaveBeenCalledWith('Single');
+      done();
+    });
   });
 });

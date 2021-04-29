@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
+import { Subject } from 'rxjs';
 import WebViewer from '@pdftron/webviewer';
 
 @Component({
@@ -10,6 +11,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer') viewer: ElementRef;
   wvInstance: any;
   @Output() coreControlsEvent:EventEmitter<any> = new EventEmitter(); 
+
+  private documentLoaded$: Subject<void>;
+
+  constructor() {
+    this.documentLoaded$ = new Subject<void>();
+  }
 
   ngAfterViewInit(): void {
 
@@ -36,28 +43,16 @@ export class AppComponent implements OnInit, AfterViewInit {
         console.log('annotations loaded');
       });
 
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+      instance.docViewer.on('documentLoaded', () => {
+        this.documentLoaded$.next()
+      })
     })
   }
 
   ngOnInit() {
-    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
 
-  wvDocumentLoadedHandler(): void {
-    // you can access docViewer object for low-level APIs
-    // and access classes defined in the WebViewer iframe
-    const { Annotations, annotManager, docViewer } = this.wvInstance;
-    const rectangle = new Annotations.RectangleAnnotation();
-    rectangle.PageNumber = 1;
-    rectangle.X = 100;
-    rectangle.Y = 100;
-    rectangle.Width = 250;
-    rectangle.Height = 250;
-    rectangle.StrokeThickness = 5;
-    rectangle.Author = annotManager.getCurrentUser();
-    annotManager.addAnnotation(rectangle);
-    annotManager.drawAnnotations(rectangle.PageNumber);
-    // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
+  getDocumentLoadedObservable() {
+    return this.documentLoaded$.asObservable();
   }
 }
