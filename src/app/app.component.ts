@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import WebViewer from '@pdftron/webviewer';
 
 @Component({
@@ -9,6 +9,7 @@ import WebViewer from '@pdftron/webviewer';
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer') viewer: ElementRef;
   wvInstance: any;
+  @Output() coreControlsEvent:EventEmitter<any> = new EventEmitter(); 
 
   ngAfterViewInit(): void {
 
@@ -17,6 +18,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       initialDoc: '../files/webviewer-demo-annotated.pdf'
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
+
+      this.coreControlsEvent.emit(instance.CoreControls.DisplayModes.Single);
 
       // now you can access APIs through this.webviewer.getInstance()
       instance.openElements(['notesPanel']);
