@@ -8,6 +8,10 @@ This repo is specifically designed for any users interested in integrating WebVi
 
 You can [watch a video](https://www.youtube.com/watch?v=OxNjs4dc6zY) that walks you through how to embed PDFTron's WebViewer inside of Angular project.
 
+## Demo
+
+You can explore all of the functionality in our [showcase](https://www.pdftron.com/webviewer/demo/).
+
 ## Initial setup
 
 Before you begin, make sure your development environment includes [Node.js](https://nodejs.org/en/).
