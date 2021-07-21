@@ -26,6 +26,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
+      this.coreControlsEvent.emit(instance.UI.LayoutMode.Single);
+
       const { documentViewer, Annotations, annotationManager } = instance.Core;
 
       instance.UI.openElements(['notesPanel']);
