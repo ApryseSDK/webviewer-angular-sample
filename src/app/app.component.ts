@@ -10,7 +10,7 @@ import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer') viewer: ElementRef;
   wvInstance: WebViewerInstance;
-  @Output() coreControlsEvent:EventEmitter<any> = new EventEmitter(); 
+  @Output() coreControlsEvent:EventEmitter<string> = new EventEmitter(); 
 
   private documentLoaded$: Subject<void>;
 
@@ -39,11 +39,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       });
 
       // or from the docViewer instance
-      instance.Core.documentViewer.on('annotationsLoaded', () => {
+      instance.Core.documentViewer.addEventListener('annotationsLoaded', () => {
         console.log('annotations loaded');
       });
 
-      instance.Core.documentViewer.on('documentLoaded', () => {
+      instance.Core.documentViewer.addEventListener('documentLoaded', () => {
         this.documentLoaded$.next()
       })
     })
