@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import WebViewer from '@pdftron/webviewer';
+import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +9,8 @@ import WebViewer from '@pdftron/webviewer';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer') viewer: ElementRef;
-  wvInstance: any;
-  @Output() coreControlsEvent:EventEmitter<any> = new EventEmitter(); 
+  wvInstance: WebViewerInstance;
+  @Output() coreControlsEvent:EventEmitter<string> = new EventEmitter(); 
 
   private documentLoaded$: Subject<void>;
 
