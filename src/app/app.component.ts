@@ -26,26 +26,30 @@ export class AppComponent implements OnInit, AfterViewInit {
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
-      this.coreControlsEvent.emit(instance.Core.DisplayModes.Single);
+      this.coreControlsEvent.emit(instance.UI.LayoutMode.Single);
 
-      // now you can access APIs through this.webviewer.getInstance()
+      const { documentViewer, Annotations, annotationManager } = instance.Core;
+
       instance.UI.openElements(['notesPanel']);
-      // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
-      // or listen to events from the viewer element
-      this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
-        const [ pageNumber ] = e.detail;
-        console.log(`Current page is ${pageNumber}`);
-      });
-
-      // or from the docViewer instance
-      instance.Core.documentViewer.addEventListener('annotationsLoaded', () => {
+      documentViewer.addEventListener('annotationsLoaded', () => {
         console.log('annotations loaded');
       });
 
-      instance.Core.documentViewer.addEventListener('documentLoaded', () => {
-        this.documentLoaded$.next()
-      })
+      documentViewer.addEventListener('documentLoaded', () => {
+        this.documentLoaded$.next();
+        const rectangleAnnot = new Annotations.RectangleAnnotation({
+          PageNumber: 1,
+          // values are in page coordinates with (0, 0) in the top left
+          X: 100,
+          Y: 150,
+          Width: 200,
+          Height: 50,
+          Author: annotationManager.getCurrentUser()
+        });
+        annotationManager.addAnnotation(rectangleAnnot);
+        annotationManager.redrawAnnotation(rectangleAnnot);
+      });
     })
   }
 
