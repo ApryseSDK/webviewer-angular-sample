@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import WebViewer from '@pdftron/webviewer';
+import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,7 @@ import WebViewer from '@pdftron/webviewer';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('viewer') viewer: ElementRef;
-  wvInstance: any;
+  wvInstance: WebViewerInstance;
   @Output() coreControlsEvent:EventEmitter<any> = new EventEmitter(); 
 
   private documentLoaded$: Subject<void>;
@@ -26,10 +26,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
-      this.coreControlsEvent.emit(instance.CoreControls.DisplayModes.Single);
+      this.coreControlsEvent.emit(instance.Core.DisplayModes.Single);
 
       // now you can access APIs through this.webviewer.getInstance()
-      instance.openElements(['notesPanel']);
+      instance.UI.openElements(['notesPanel']);
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       // or listen to events from the viewer element
@@ -39,11 +39,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       });
 
       // or from the docViewer instance
-      instance.docViewer.on('annotationsLoaded', () => {
+      instance.Core.documentViewer.on('annotationsLoaded', () => {
         console.log('annotations loaded');
       });
 
-      instance.docViewer.on('documentLoaded', () => {
+      instance.Core.documentViewer.on('documentLoaded', () => {
         this.documentLoaded$.next()
       })
     })
