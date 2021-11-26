@@ -1,7 +1,7 @@
 import { Component, ViewChild, OnInit, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
-import { initializeVideoViewer } from '@pdftron/webviewer-video';
+import { initializeVideoViewer } from '@pdftron/webviewer-video/dist/main-with-react';
 
 @Component({
   selector: 'app-root',
