@@ -24,6 +24,8 @@
     "@pdftron/webviewer": "^8.3.0",
     "@pdftron/webviewer-video": "^4.21.1",
     "core-js": "^2.5.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "rxjs": "^6.5.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
