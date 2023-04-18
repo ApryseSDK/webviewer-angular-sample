@@ -2,18 +2,20 @@
 
 # WebViewer
 src/lib
-WebViewer.zip
 
-# compiled output
+# Compiled output
 /dist
 /tmp
 /out-tsc
+/bazel-out
 
-# dependencies
+# Node
 /node_modules
+npm-debug.log
+yarn-error.log
 
 # IDEs and editors
-/.idea
+.idea/
 .project
 .classpath
 .c9/
@@ -21,26 +23,23 @@ WebViewer.zip
 .settings/
 *.sublime-workspace
 
-# IDE - VSCode
+# Visual Studio Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.history/*
 
-# misc
-/.sass-cache
+# Miscellaneous
+/.angular/cache
+.sass-cache/
 /connect.lock
 /coverage
 /libpeerconnection.log
-npm-debug.log
-yarn-error.log
 testem.log
 /typings
-package-lock.json
-/src/assets/webviewer/core
-/src/assets/webviewer/ui
 
-# System Files
+# System files
 .DS_Store
 Thumbs.db

@@ -4,7 +4,7 @@
 
 ![WebViewer UI](https://www.pdftron.com/downloads/pl/webviewer-ui.png)
 
-This repo is specifically designed for any users interested in integrating WebViewer into Angular project. This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.3. 
+This repo is specifically designed for any users interested in integrating WebViewer into Angular project. This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.0.
 
 You can [watch a video](https://www.youtube.com/watch?v=OxNjs4dc6zY) that walks you through how to embed PDFTron's WebViewer inside of Angular project.
 
@@ -40,7 +40,6 @@ The build artifacts will be stored in the `dist/` directory.
 
 To run the build, navigate to the `dist/angular` directory, and run `http-server`. Navigate to the url: host:port/index.html to see the app
 (https://github.com/http-party/http-server/issues/525).
-
 
 ## WebViewer APIs
 

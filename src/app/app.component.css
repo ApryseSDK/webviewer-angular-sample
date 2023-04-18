@@ -19,7 +19,7 @@ app-webviewer {
   flex: 1;
   margin: 8px;
   -webkit-box-shadow: 1px 1px 10px #999;
-          box-shadow: 1px 1px 10px #999;
+  box-shadow: 1px 1px 10px #999;
 }
 
 .viewer { width: 100%; height: 100%; }

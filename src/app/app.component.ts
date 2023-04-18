@@ -1,16 +1,18 @@
-import { Component, ViewChild, OnInit, Output, EventEmitter, ElementRef, AfterViewInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import WebViewer, { WebViewerInstance } from '@pdftron/webviewer';
+import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import WebViewer, {WebViewerInstance} from "@pdftron/webviewer";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['app.component.css'],
+  templateUrl: 'app.component.html'
 })
-export class AppComponent implements OnInit, AfterViewInit {
-  @ViewChild('viewer') viewer: ElementRef;
-  wvInstance: WebViewerInstance;
-  @Output() coreControlsEvent:EventEmitter<string> = new EventEmitter(); 
+export class AppComponent implements AfterViewInit {
+  wvInstance?: WebViewerInstance;
+  
+  @ViewChild('viewer') viewer!: ElementRef;
+  
+  @Output() coreControlsEvent:EventEmitter<string> = new EventEmitter();
 
   private documentLoaded$: Subject<void>;
 
@@ -51,12 +53,5 @@ export class AppComponent implements OnInit, AfterViewInit {
         annotationManager.redrawAnnotation(rectangleAnnot);
       });
     })
-  }
-
-  ngOnInit() {
-  }
-
-  getDocumentLoadedObservable() {
-    return this.documentLoaded$.asObservable();
   }
 }
