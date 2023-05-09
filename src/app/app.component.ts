@@ -24,7 +24,8 @@ export class AppComponent implements AfterViewInit {
 
     WebViewer({
       path: '../lib',
-      initialDoc: '../files/webviewer-demo-annotated.pdf'
+      initialDoc: '../files/webviewer-demo-annotated.pdf',
+      licenseKey: 'your_license_key'  // sign up to get a free trial key at https://dev.apryse.com
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
