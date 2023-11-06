@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import WebViewer, {WebViewerInstance} from "@pdftron/webviewer";
 import {Subject} from "rxjs";
 
@@ -7,7 +7,39 @@ import {Subject} from "rxjs";
   styleUrls: ['app.component.css'],
   templateUrl: 'app.component.html'
 })
+
+// This code was tested with
+// Angular CLI: 15.1.6
+// Node: 20.9.0 (Unsupported)
+// Package Manager: npm 10.1.0
+// OS: win32 x64
+//
+// and
+// Angular CLI: 15.1.6
+// Node: 16.20.2
+// Package Manager: npm 8.19.4
+// OS: win32 x64
+
+
 export class AppComponent implements AfterViewInit {
+
+   jsonData = {
+    COMPANYNAME: 'Apryse',
+    CUSTOMERNAME: 'Huw Dickens',
+    CompanyAddressLine1: '838 W Hastings St 5th floor',
+    CompanyAddressLine2: 'Vancouver, BC V6C 0A6',
+    CustomerAddressLine1: '123 Main Street',
+    CustomerAddressLine2: 'Vancouver, BC V6A 2S5',
+    Date: { html: "<span style='color: red'><b>Nov 5th, 2023</b></span>" },
+    ExpiryDate: 'Nov 15th, 2023',
+    QuoteNumber: '134',
+    WEBSITE: 'www.apryse.com',
+    rows: [{ 'item': 'Apples', 'item_qty': '3', 'item_price': '$5.00', 'item_total': '$15.00' },
+    { 'item': 'Oranges', 'item_qty': '2', 'item_price': '$5.00', 'item_total': '$10.00' }],
+    days: '30',
+    total: '$25.00'
+  };
+
   wvInstance?: WebViewerInstance;
   
   @ViewChild('viewer') viewer!: ElementRef;
@@ -24,35 +56,17 @@ export class AppComponent implements AfterViewInit {
 
     WebViewer({
       path: '../lib',
-      initialDoc: '../files/webviewer-demo-annotated.pdf',
+      initialDoc: '../files/quote.docx',
       licenseKey: 'your_license_key'  // sign up to get a free trial key at https://dev.apryse.com
     }, this.viewer.nativeElement).then(instance => {
       this.wvInstance = instance;
 
-      this.coreControlsEvent.emit(instance.UI.LayoutMode.Single);
-
-      const { documentViewer, Annotations, annotationManager } = instance.Core;
-
-      instance.UI.openElements(['notesPanel']);
-
-      documentViewer.addEventListener('annotationsLoaded', () => {
-        console.log('annotations loaded');
-      });
+      const { documentViewer} = instance.Core;
 
       documentViewer.addEventListener('documentLoaded', () => {
-        this.documentLoaded$.next();
-        const rectangleAnnot = new Annotations.RectangleAnnotation({
-          PageNumber: 1,
-          // values are in page coordinates with (0, 0) in the top left
-          X: 100,
-          Y: 150,
-          Width: 200,
-          Height: 50,
-          Author: annotationManager.getCurrentUser()
-        });
-        annotationManager.addAnnotation(rectangleAnnot);
-        annotationManager.redrawAnnotation(rectangleAnnot);
+        documentViewer.getDocument().applyTemplateValues(this.jsonData);
       });
+   
     })
   }
 }
