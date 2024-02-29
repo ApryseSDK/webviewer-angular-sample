@@ -55,7 +55,9 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/lib/core/webviewer-core.min.js"
+            ]
           },
           "configurations": {
             "production": {
