@@ -50,7 +50,11 @@
             "assets": [
               "src/favicon.ico",
               "src/files",
-              "src/lib"
+              {
+                "glob": "**/*",
+                "input": "node_modules/@pdftron/webviewer/public",
+                "output": "/lib"
+              }
             ],
             "styles": [
               "src/styles.css"
