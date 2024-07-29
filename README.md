@@ -25,11 +25,21 @@ You can [watch a video](https://www.youtube.com/watch?v=OxNjs4dc6zY) that walks 
 
 ## Trial
 
-WebViewer comes with a 7-day trial without any feature limitations or trial key needed. To extend the trial, you can obtain the trial key by [signing-up](https://dev.apryse.com/) on our [developer portal](https://dev.apryse.com/).
+You can obtain the trial key by signing-up on our [developer portal](https://dev.apryse.com/).
+
 
 ## Initial setup
 
 Before you begin, make sure your development environment includes [Node.js](https://nodejs.org/en/).
+
+In order to set the license key, you will need to set the string in the WebViewer sample. One such way is by passing it into the constructor of the WebViewer: https://docs.apryse.com/documentation/web/faq/add-license/#passing-into-constructor
+
+Follow the steps below to set the license key in this sample:
+
+- Locate the app.component.ts file at /src/app/app.component.ts
+- Replace "your_license_key" with your license
+- Save the file
+
 
 ## Install
 
